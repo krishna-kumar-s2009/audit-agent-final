@@ -54,6 +54,6 @@ Audit Intelligence bridges the gap by introducing dynamic context retention:
 
 ## 📌 Project Status
 
-Hackathon project – Finalized and ready for submission.
+Active development project – Finalized and ready for deployment.
 
 🔗 **Repository:** [https://github.com/krishna-kumar-s2009/audit-agent-final](https://github.com/krishna-kumar-s2009/audit-agent-final)
