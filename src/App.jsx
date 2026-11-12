@@ -41,7 +41,6 @@ function App() {
   }, [messages, isLoading])
 
   const submitToBackend = async (userMessage) => {
-    // FIX 1: English-only System Prompt injected here
     const groqMessages = [
       {
         role: 'system',
@@ -68,7 +67,7 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant', // Make sure this is a valid Groq model name
+        model: 'mixtral-8x7b-32768',
         messages: groqMessages,
       }),
     })
@@ -123,7 +122,7 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden flex-col bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-[#7a6d54] text-[#F5F0E6]">
+    <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-[#7a6d54] text-[#F5F0E6]">
       
       {/* Scattered Stars Background with Infinite Drift Animation */}
       <div
@@ -165,8 +164,8 @@ function App() {
         }
       `}</style>
 
-      {/* Header - FIX 2: Added sticky top-0 and z-50 to lock it in place */}
-      <header className="sticky top-0 z-50 border-b border-[#F5F0E6]/10 bg-[#1F3D2B]/60 backdrop-blur-xl shadow-md">
+      {/* Header */}
+      <header className="relative z-50 border-b border-[#F5F0E6]/10 bg-[#1F3D2B]/60 backdrop-blur-xl shadow-md shrink-0">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8B5CF6] drop-shadow-sm">
@@ -209,8 +208,8 @@ function App() {
       </header>
 
       {/* Main Chat Interface */}
-      <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col px-6 py-8">
-        <section className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-[#F5F0E6]/10 bg-[#162c1f]/60 shadow-2xl backdrop-blur-xl">
+      <main className="relative z-10 mx-auto flex w-full max-w-5xl flex-1 flex-col px-6 py-8 min-h-0">
+        <section className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-[#F5F0E6]/10 bg-[#162c1f]/60 shadow-2xl backdrop-blur-xl">
           <div
             ref={feedRef}
             className="flex-1 space-y-6 overflow-y-auto px-6 py-6 scroll-smooth"
@@ -263,7 +262,7 @@ function App() {
 
           <form
             onSubmit={handleSubmit}
-            className="flex gap-3 border-t border-[#F5F0E6]/10 bg-[#162c1f]/80 p-4 backdrop-blur-md"
+            className="flex gap-3 border-t border-[#F5F0E6]/10 bg-[#162c1f]/80 p-4 backdrop-blur-md shrink-0"
           >
             <input
               type="text"
