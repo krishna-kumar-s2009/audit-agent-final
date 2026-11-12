@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState, useRef, useEffect } from 'react';
+import Groq from 'groq-sdk';
+
+const groq = new Groq({
+  apiKey: import.meta.env.VITE_GROQ_API_KEY,
+  dangerouslyAllowBrowser: true 
+});
+console.log("MY KEY IS:", import.meta.env.VITE_GROQ_API_KEY);
 
 const INITIAL_AUDIT_MEMORY = {
   company_id: 'CORP-7729-A',
@@ -20,7 +27,7 @@ const INITIAL_AUDIT_MEMORY = {
 }
 
 function App() {
-  const GROQ_API_KEY = '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'
+  const GROQ_API_KEY = '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'
   const [hindsightMemoryOn, setHindsightMemoryOn] = useState(false)
   const [auditMemoryContext] = useState(INITIAL_AUDIT_MEMORY)
   const [messages, setMessages] = useState([])
@@ -211,7 +218,7 @@ function App() {
                   </svg>
                 </div>
                 <p className="text-lg font-semibold text-[#F5F0E6]">
-                  Secure Terminal Ready
+                  Secure Terminal Online
                 </p>
                 <p className="mt-2 max-w-md text-sm text-[#F5F0E6]/90 leading-relaxed">
                   Submit an audit inquiry below. Toggle Hindsight Memory to inject isolated historical findings directly into the secure reasoning context.
