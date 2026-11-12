@@ -27,7 +27,6 @@ const INITIAL_AUDIT_MEMORY = {
 }
 
 function App() {
-  const GROQ_API_KEY = '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'
   const [hindsightMemoryOn, setHindsightMemoryOn] = useState(false)
   const [auditMemoryContext] = useState(INITIAL_AUDIT_MEMORY)
   const [messages, setMessages] = useState([])
