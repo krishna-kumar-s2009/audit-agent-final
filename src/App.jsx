@@ -68,7 +68,7 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile', // Make sure this is a valid Groq model name
+        model: 'llama-3.1-8b-instant', // Make sure this is a valid Groq model name
         messages: groqMessages,
       }),
     })
@@ -123,7 +123,7 @@ function App() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-[#7a6d54] text-[#F5F0E6]">
+    <div className="flex h-screen overflow-hidden flex-col bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-[#7a6d54] text-[#F5F0E6]">
       
       {/* Scattered Stars Background with Infinite Drift Animation */}
       <div
