@@ -3,7 +3,7 @@ import Groq from 'groq-sdk';
 
 const groq = new Groq({
   apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true 
+  dangerouslyAllowBrowser: true
 });
 
 const INITIAL_AUDIT_MEMORY = {
@@ -41,12 +41,18 @@ function App() {
   }, [messages, isLoading])
 
   const submitToBackend = async (userMessage) => {
-    const groqMessages = []
+    // FIX 1: English-only System Prompt injected here
+    const groqMessages = [
+      {
+        role: 'system',
+        content: 'You are an expert Audit Compliance AI Agent. You must always answer entirely in English.'
+      }
+    ]
 
     if (hindsightMemoryOn) {
       groqMessages.push({
         role: 'system',
-        content: `You are a compliance Audit Agent. Here is the historical context: ${JSON.stringify(auditMemoryContext)}`,
+        content: `You are a compliance Audit Agent. Here is the historical context: ${JSON.stringify(auditMemoryContext)}`
       })
     }
 
@@ -62,7 +68,7 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-20b',
+        model: 'llama3-8b-8192', // Make sure this is a valid Groq model name
         messages: groqMessages,
       }),
     })
@@ -80,7 +86,7 @@ function App() {
     event.preventDefault()
     const text = input.trim()
     if (!text || isLoading) return
-    
+
     setMessages((prev) => [
       ...prev,
       {
@@ -117,10 +123,10 @@ function App() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-[#7a6d54] text-[#F5F0E6] font-sans relative overflow-hidden">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-[#7a6d54] text-[#F5F0E6]">
       
       {/* Scattered Stars Background with Infinite Drift Animation */}
-      <div 
+      <div
         className="absolute inset-0 z-0 pointer-events-none opacity-40 animate-stars"
         style={{
           backgroundImage: `
@@ -138,9 +144,9 @@ function App() {
           backgroundSize: '160px 160px'
         }}
       />
-      
+
       {/* Deep Ambient Purple Glow merging with the Beige Ocean */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/3 w-[800px] h-[500px] bg-[#8B5CF6] rounded-full blur-[140px] opacity-30 pointer-events-none z-0" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/3 w-[800px] h-[500px] bg-[#8B5CF6] rounded-full blur-[120px] opacity-20 pointer-events-none" />
 
       <style>{`
         @keyframes slideUpFade {
@@ -159,8 +165,8 @@ function App() {
         }
       `}</style>
 
-      {/* Header */}
-      <header className="relative z-10 border-b border-[#F5F0E6]/10 bg-[#1F3D2B]/60 backdrop-blur-xl shadow-md">
+      {/* Header - FIX 2: Added sticky top-0 and z-50 to lock it in place */}
+      <header className="sticky top-0 z-50 border-b border-[#F5F0E6]/10 bg-[#1F3D2B]/60 backdrop-blur-xl shadow-md">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#8B5CF6] drop-shadow-sm">
@@ -176,7 +182,7 @@ function App() {
 
           <div className="flex items-center gap-3 rounded-xl border border-[#F5F0E6]/10 bg-[#1F3D2B]/80 px-4 py-2.5 backdrop-blur-md shadow-inner">
             <span className="text-sm font-medium text-[#F5F0E6]">
-              Hindsight Memory:{' '}
+              Hindsight Memory: {' '}
               <span className={hindsightMemoryOn ? 'font-bold text-[#8B5CF6] drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]' : 'text-[#F5F0E6]/60'}>
                 {hindsightMemoryOn ? 'ON' : 'OFF'}
               </span>
@@ -185,10 +191,10 @@ function App() {
               type="button"
               role="switch"
               aria-checked={hindsightMemoryOn}
-              onClick={() => setHindsightMemoryOn((value) => !value)}
+              onClick={() => setHindsightMemoryOn(!hindsightMemoryOn)}
               className={`relative h-6 w-11 shrink-0 overflow-hidden rounded-full p-0.5 transition-all duration-300 ${
-                hindsightMemoryOn 
-                  ? 'bg-[#8B5CF6] shadow-[0_0_15px_rgba(139,92,246,0.8)]' 
+                hindsightMemoryOn
+                  ? 'bg-[#8B5CF6] shadow-[0_0_15px_rgba(139,92,246,0.8)]'
                   : 'bg-[#1F3D2B] border border-[#F5F0E6]/30'
               }`}
             >
@@ -224,36 +230,34 @@ function App() {
                 </p>
               </div>
             ) : (
-              <>
-                {messages.map((message) => (
+              messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex animate-message ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
                   <div
-                    key={message.id}
-                    className={`flex animate-message ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    className={`max-w-[85%] px-5 py-3.5 text-[15px] leading-relaxed shadow-lg whitespace-pre-wrap ${
+                      message.role === 'user'
+                        ? 'rounded-2xl rounded-br-sm bg-[#8B5CF6] text-white font-medium shadow-[0_0_15px_rgba(139,92,246,0.4)]'
+                        : 'rounded-2xl rounded-bl-sm bg-[#1F3D2B]/90 text-[#F5F0E6] border border-[#F5F0E6]/10'
+                    }`}
                   >
-                    <div
-                      className={`max-w-[85%] px-5 py-3.5 text-[15px] leading-relaxed shadow-lg whitespace-pre-wrap ${
-                        message.role === 'user'
-                          ? 'rounded-2xl rounded-br-sm bg-[#8B5CF6] text-white font-medium shadow-[0_0_15px_rgba(139,92,246,0.4)]'
-                          : 'rounded-2xl rounded-bl-sm bg-[#1F3D2B]/90 text-[#F5F0E6] border border-[#F5F0E6]/10'
-                      }`}
-                    >
-                      {message.content}
-                    </div>
+                    {message.content}
                   </div>
-                ))}
-                
-                {isLoading && (
-                  <div className="flex justify-start animate-message">
-                    <div className="rounded-2xl rounded-bl-sm bg-[#1F3D2B]/90 border border-[#F5F0E6]/10 px-5 py-4 shadow-lg">
-                      <div className="flex space-x-2 items-center h-2">
-                        <div className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" style={{ animationDelay: '0ms' }}></div>
-                        <div className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" style={{ animationDelay: '150ms' }}></div>
-                        <div className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" style={{ animationDelay: '300ms' }}></div>
-                      </div>
-                    </div>
+                </div>
+              ))
+            )}
+
+            {isLoading && (
+              <div className="flex justify-start animate-message">
+                <div className="rounded-2xl rounded-bl-sm bg-[#1F3D2B]/90 border border-[#F5F0E6]/10 px-5 py-4 shadow-lg">
+                  <div className="flex space-x-2 items-center h-2">
+                    <div className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 rounded-full bg-[#8B5CF6] animate-pulse shadow-[0_0_8px_#8B5CF6]" style={{ animationDelay: '300ms' }}></div>
                   </div>
-                )}
-              </>
+                </div>
+              </div>
             )}
           </div>
 
@@ -267,12 +271,12 @@ function App() {
               onChange={(event) => setInput(event.target.value)}
               disabled={isLoading}
               placeholder="Query the audit logs..."
-              className="flex-1 rounded-xl border border-[#F5F0E6]/20 bg-[#1F3D2B] px-4 py-3 text-[15px] text-[#F5F0E6] outline-none transition-all placeholder:text-[#F5F0E6]/50 focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] focus:shadow-[0_0_12px_rgba(139,92,246,0.3)] disabled:opacity-50"
+              className="flex-1 rounded-xl border border-[#F5F0E6]/20 bg-[#1F3D2B] px-4 py-3 text-[15px] text-[#F5F0E6] outline-none transition-all placeholder:text-[#F5F0E6]/40 focus:border-[#8B5CF6] focus:bg-[#162c1f] focus:ring-1 focus:ring-[#8B5CF6]"
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="rounded-xl bg-[#8B5CF6] px-6 py-3 text-[15px] font-bold text-white shadow-[0_0_15px_rgba(139,92,246,0.5)] transition-all hover:bg-[#7c4de0] hover:shadow-[0_0_20px_rgba(139,92,246,0.7)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-[#8B5CF6] disabled:shadow-none"
+              className="rounded-xl bg-[#8B5CF6] px-6 py-3 text-[15px] font-bold text-white shadow-[0_0_15px_rgba(139,92,246,0.5)] transition-all hover:bg-[#7c4dff] active:scale-95 disabled:pointer-events-none disabled:opacity-50"
             >
               Submit
             </button>
