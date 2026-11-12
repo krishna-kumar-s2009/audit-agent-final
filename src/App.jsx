@@ -67,7 +67,7 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'mixtral-8x7b-32768',
+        model: 'gemma2-9b-it',
         messages: groqMessages,
       }),
     })
@@ -124,7 +124,7 @@ function App() {
   return (
     <div className="fixed inset-0 flex flex-col bg-gradient-to-b from-[#1F3D2B] via-[#1F3D2B] to-[#7a6d54] text-[#F5F0E6]">
       
-      {/* Scattered Stars Background with Infinite Drift Animation */}
+      {/* Scattered Stars Background */}
       <div
         className="absolute inset-0 z-0 pointer-events-none opacity-40 animate-stars"
         style={{
@@ -144,7 +144,7 @@ function App() {
         }}
       />
 
-      {/* Deep Ambient Purple Glow merging with the Beige Ocean */}
+      {/* Ambient Glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/3 w-[800px] h-[500px] bg-[#8B5CF6] rounded-full blur-[120px] opacity-20 pointer-events-none" />
 
       <style>{`
