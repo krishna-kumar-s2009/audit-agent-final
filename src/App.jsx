@@ -68,7 +68,7 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192', // Make sure this is a valid Groq model name
+        model: 'llama-3.3-70b-versatile', // Make sure this is a valid Groq model name
         messages: groqMessages,
       }),
     })
