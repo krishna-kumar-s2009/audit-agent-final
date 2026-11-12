@@ -67,7 +67,7 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gemma2-9b-it',
+        model: 'openai/gpt-oss-20b',
         messages: groqMessages,
       }),
     })
