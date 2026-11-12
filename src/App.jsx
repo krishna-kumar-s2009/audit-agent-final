@@ -27,6 +27,7 @@ const INITIAL_AUDIT_MEMORY = {
 }
 
 function App() {
+  const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
   const [hindsightMemoryOn, setHindsightMemoryOn] = useState(false)
   const [auditMemoryContext] = useState(INITIAL_AUDIT_MEMORY)
   const [messages, setMessages] = useState([])
