@@ -5,7 +5,6 @@ const groq = new Groq({
   apiKey: import.meta.env.VITE_GROQ_API_KEY,
   dangerouslyAllowBrowser: true 
 });
-console.log("MY KEY IS:", import.meta.env.VITE_GROQ_API_KEY);
 
 const INITIAL_AUDIT_MEMORY = {
   company_id: 'CORP-7729-A',
